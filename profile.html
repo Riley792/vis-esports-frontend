@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIS ESPORTS | Player Profile</title>
+    <link rel="icon" type="image/png" href="Images/vis-logo.jpeg">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body class="auth-page">
+
+    <div class="auth-bg-visuals">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+    </div>
+
+    <header class="navbar">
+        <a href="index.html" class="brand-logo">
+            <img src="Images/vis-logo.jpeg" alt="VIS Esports Logo">
+            <span>VIS ESPORTS</span>
+        </a>
+        
+        <div class="hamburger" id="hamburger">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+
+        <div class="nav-menu" id="navMenu">
+            <nav class="nav-links">
+                <a href="roster.html">Roster</a>
+                <a href="tryouts.html">Tryouts</a>
+                <a href="shop.html">Shop</a>
+                <a href="about.html">About</a>
+            </nav>
+            <div class="nav-actions">
+            </div>
+        </div>
+    </header>
+
+    <section class="profile-section">
+        <div class="profile-container glass-form">
+            
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    <span id="avatarLetter">?</span>
+                </div>
+                <div class="profile-title-info">
+                    <h1 id="profileUsername">LOADING...</h1>
+                    <p class="role-badge" id="profileRole">RECRUIT</p>
+                </div>
+            </div>
+
+            <div class="profile-data-grid">
+                <div class="data-card id-card">
+                    <p class="data-label">OFFICIAL VIS TAG</p>
+                    <h2 class="vis-id-text" id="profileVisId">VIS-##-##-####-###</h2>
+                </div>
+                
+                <div class="data-card">
+                    <p class="data-label">PRIMARY DIVISION</p>
+                    <h3 id="profileDivision">Loading...</h3>
+                </div>
+                
+                <div class="data-card">
+                    <p class="data-label">STATUS</p>
+                    <h3 style="color: #00E676;">Active</h3>
+                </div>
+            </div>
+
+            <div class="profile-stats-section" style="margin-top: 2.5rem;">
+                <h3 style="margin-bottom: 1.5rem; font-size: 1rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">Competitive Stats</h3>
+                
+                <div class="profile-data-grid">
+                    <div class="data-card">
+                        <p class="data-label">CURRENT RANK</p>
+                        <h3 id="profileRank" style="color: var(--text-light);">Unranked</h3>
+                    </div>
+                    
+                    <div class="data-card">
+                        <p class="data-label">CAREER EVIDENCE</p>
+                        <a href="#" id="profileScreenshot" target="_blank" style="color: var(--accent-vis); font-weight: bold; text-decoration: none; margin-top: 0.5rem; display: none;">View Screenshot</a>
+                        <h3 id="profileScreenshotPending" style="color: var(--text-muted); font-size: 1rem;">No Evidence</h3>
+                    </div>
+                    
+                    <div class="data-card id-card" style="margin-top: 1rem;">
+                        <p class="data-label">APPLICATION STATUS</p>
+                        <h3 id="profileStatus" style="color: #FFB300; font-size: 1.5rem; text-transform: uppercase;">Not Applied</h3>
+                    </div>
+                </div>
+            </div>
+
+        </div> 
+    </section>
+
+    <script src="script.js"></script>
+
+    <script type="module">
+        // UPDATED: Use getApps/getApp to prevent crashes
+        import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyClyDIebYb0y3ur8-N4C2whGcUgeJnz00w",
+            authDomain: "vis-esports.firebaseapp.com",
+            projectId: "vis-esports",
+            storageBucket: "vis-esports.firebasestorage.app",
+            messagingSenderId: "247020318664",
+            appId: "1:247020318664:web:5e0782ac4f04df01821afd"
+        };
+
+        const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const divisionNames = {
+            "BS": "Blood Strike",
+            "CO": "Call of Duty: Mobile",
+            "FF": "Free Fire",
+            "EA": "EAFC",
+            "PE": "PES"
+        };
+
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = "login.html";
+                return;
+            }
+
+            // OPTIMIZATION: Fetch both documents at the exact same time
+            const playerRef = doc(db, "players", user.uid);
+            const tryoutRef = doc(db, "tryouts", user.uid);
+
+            try {
+                const [playerSnap, tryoutSnap] = await Promise.all([
+                    getDoc(playerRef),
+                    getDoc(tryoutRef)
+                ]);
+
+                // 1. Populate Base Profile
+                if (playerSnap.exists()) {
+                    const data = playerSnap.data();
+                    document.getElementById('profileUsername').textContent = data.username.toUpperCase();
+                    document.getElementById('avatarLetter').textContent = data.username.charAt(0).toUpperCase();
+                    document.getElementById('profileVisId').textContent = data.visId;
+                    document.getElementById('profileDivision').textContent = divisionNames[data.division] || "Unknown";
+                    document.getElementById('profileRole').textContent = data.role.toUpperCase();
+                }
+
+                // 2. Populate Tryout Stats
+                if (tryoutSnap.exists()) {
+                    const tryoutData = tryoutSnap.data();
+                    
+                    document.getElementById('profileRank').textContent = tryoutData.currentRank;
+                    
+                    // Hook up the new screenshot link
+                    if (tryoutData.statScreenshotUrl) {
+                        const linkEl = document.getElementById('profileScreenshot');
+                        const pendingEl = document.getElementById('profileScreenshotPending');
+                        
+                        linkEl.href = tryoutData.statScreenshotUrl;
+                        linkEl.style.display = 'inline-block';
+                        pendingEl.style.display = 'none';
+                    }
+                    
+                    const statusEl = document.getElementById('profileStatus');
+                    statusEl.textContent = tryoutData.status.toUpperCase();
+                    
+                    if (tryoutData.status === "Accepted") statusEl.style.color = "#00E676"; 
+                    else if (tryoutData.status === "Denied") statusEl.style.color = "#FF1744"; 
+                    else statusEl.style.color = "#FFB300"; 
+                } else {
+                    const statusEl = document.getElementById('profileStatus');
+                    statusEl.textContent = "NOT APPLIED";
+                    statusEl.style.color = "var(--text-muted)";
+                    statusEl.parentElement.innerHTML += '<br><a href="tryouts.html" style="color: var(--accent-vis); font-size: 0.8rem; text-decoration: none; margin-top: 10px; display: inline-block;">GO TO PROVING GROUNDS ➔</a>';
+                }
+
+            } catch (error) {
+                console.error("Error fetching profile data:", error);
+            }
+        });
+    </script>
+</body>
+</html>

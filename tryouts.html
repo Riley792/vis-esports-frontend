@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIS ESPORTS | Tryouts Portal</title>
+    <link rel="icon" type="image/png" href="Images/vis-logo.jpeg">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <a href="index.html" class="brand-logo">
+            <img src="Images/vis-logo.jpeg" alt="VIS Esports Logo">
+            <span>VIS ESPORTS</span>
+        </a>
+
+        <div class="hamburger" id="hamburger">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+
+        <div class="nav-menu" id="navMenu">
+            <nav class="nav-links">
+                <a href="roster.html">Roster</a>
+                <a href="tryouts.html">Tryouts</a>
+                <a href="shop.html">Shop</a>
+                <a href="about.html">About</a>
+            </nav>
+            <div class="nav-actions">
+                <a href="#cart" class="btn-ghost cart-btn">Cart (<span>0</span>)</a>
+                <a href="signup.html" class="btn-neon">Join Us</a>
+                <a href="login.html" class="btn-primary">Login</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="portal-header">
+        <h1>THE <span class="highlight-vis">PROVING</span> GROUNDS</h1>
+        <p>Drop your stats. Link your clips. Bring the receipts.</p>
+    </section>
+
+    <section class="form-section">
+        <div class="form-container">
+
+            <div id="authLoader" style="text-align: center; padding: 3rem 0;">
+                <h2 style="color: var(--accent-vis); font-weight: 900; letter-spacing: 2px;">VERIFYING CLEARANCE...</h2>
+            </div>
+
+            <form id="tryoutForm" class="tryout-form" style="display: none;">
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="realName">Real Name</label>
+                        <input type="text" id="realName" class="form-control" placeholder="John Doe" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="discordId">Discord ID</label>
+                        <input type="text" id="discordId" class="form-control" placeholder="Ghost#1234" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="primaryGame">Primary Game</label>
+                        <select id="primaryGame" class="form-control" required>
+                            <option value="" disabled selected>Select Your Battlefield</option>
+                            <option value="bloodstrike">Blood Strike</option>
+                            <option value="codm">Call of Duty: Mobile</option>
+                            <option value="pubg">Free Fire</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="inGameName">In-Game Name (IGN)</label>
+                        <input type="text" id="inGameName" class="form-control" placeholder="VIS | Ghost" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="currentRank">Current Rank</label>
+                        <input type="text" id="currentRank" class="form-control" placeholder="Legend / Conqueror"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="statScreenshot">Career Stats (Screenshot Proof)</label>
+                        <input type="file" id="statScreenshot" class="form-control"
+                            accept="image/png, image/jpeg, image/jpg" required style="padding: 0.7rem;">
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="vodLink">VOD / Gameplay Link (Crucial)</label>
+                    <input type="url" id="vodLink" class="form-control"
+                        placeholder="YouTube or Twitch link to your best gameplay" required>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="whyVis">Why do you belong in VIS?</label>
+                    <textarea id="whyVis" class="form-control" rows="4"
+                        placeholder="Don't write a novel. Be direct."></textarea>
+                </div>
+
+                <button type="submit" class="btn-primary submit-btn">SUBMIT APPLICATION</button>
+            </form>
+
+            <div id="formSuccess" class="form-success hidden">
+                <h2>APPLICATION RECEIVED.</h2>
+                <p>We are reviewing your stats. Keep grinding.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-col brand-col">
+            <div class="brand-logo-footer">
+                <img src="Images/vis-logo.jpeg" alt="VIS Logo">
+                <span>VIS</span>
+            </div>
+            <p>Game with purpose.</p>
+        </div>
+        <div class="footer-col links-col">
+            <a href="roster.html">Roster</a>
+            <a href="tryouts.html">Tryouts</a>
+            <a href="shop.html">Shop</a>
+        </div>
+        <div class="footer-col social-col">
+            <a href="https://www.tiktok.com/@vis.esports" target="_blank">TikTok</a>
+            <a href="https://www.instagram.com/visesports.official" target="_blank">Instagram</a>
+            <a href="https://x.com/EsportsVis48878" target="_blank">X (Twitter)</a>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script type="module">
+        import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyClyDIebYb0y3ur8-N4C2whGcUgeJnz00w",
+            authDomain: "vis-esports.firebaseapp.com",
+            projectId: "vis-esports",
+            storageBucket: "vis-esports.firebasestorage.app",
+            messagingSenderId: "247020318664",
+            appId: "1:247020318664:web:5e0782ac4f04df01821afd"
+        };
+
+        const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // CONFIG KEYS (Updated to Official Server Webhook)
+        const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1479467294634803330/R3eTxhxsHzXXJqOoPnxEXKN6YlwGsZffOMSsmKBanr2Ej22mN0A5TZNOm2NyrPPB-hv9";
+        const IMGBB_API_KEY = "7167509ead7c0234cf052fc95843bae6"; 
+
+        let currentUserId = null;
+        onAuthStateChanged(auth, (user) => {
+            currentUserId = user ? user.uid : null;
+        });
+
+        const tryoutForm = document.getElementById('tryoutForm');
+        const formSuccess = document.getElementById('formSuccess');
+
+        if (tryoutForm) {
+            tryoutForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                if (!currentUserId) {
+                    alert("Authentication Error: You must be logged in.");
+                    return;
+                }
+
+                const fileInput = document.getElementById('statScreenshot');
+                const file = fileInput.files[0];
+
+                if (!file) {
+                    alert("Please select a screenshot of your career stats.");
+                    return;
+                }
+
+                const submitBtn = tryoutForm.querySelector('.submit-btn');
+                const originalText = submitBtn.textContent;
+
+                submitBtn.textContent = "UPLOADING EVIDENCE...";
+                submitBtn.disabled = true;
+
+                try {
+                    // 1. SILENTLY UPLOAD IMAGE TO IMGBB
+                    const formData = new FormData();
+                    formData.append("image", file);
+
+                    const imgbbResponse = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const imgbbData = await imgbbResponse.json();
+
+                    if (!imgbbData.success) {
+                        throw new Error("Failed to upload image to remote server.");
+                    }
+
+                    // Extract the live URL from the ImgBB response
+                    const liveImageUrl = imgbbData.data.url;
+
+                    submitBtn.textContent = "TRANSMITTING DATA...";
+
+                    // 2. Save directly to Firestore Database with the new URL
+                    const applicationData = {
+                        uid: currentUserId,
+                        realName: document.getElementById('realName').value,
+                        discordId: document.getElementById('discordId').value,
+                        primaryGame: document.getElementById('primaryGame').value,
+                        inGameName: document.getElementById('inGameName').value,
+                        currentRank: document.getElementById('currentRank').value,
+                        statScreenshotUrl: liveImageUrl,
+                        vodLink: document.getElementById('vodLink').value,
+                        whyVis: document.getElementById('whyVis').value,
+                        status: "Pending Review",
+                        submittedAt: serverTimestamp()
+                    };
+
+                    await setDoc(doc(db, "tryouts", currentUserId), applicationData);
+
+                    // 3. FIRE THE DISCORD WEBHOOK ALARM
+                    const discordPayload = {
+                        username: "VIS Command Tracker",
+                        avatar_url: "https://i.imgur.com/8Q7v4wA.png",
+                        embeds: [{
+                            title: "🚨 NEW VIS TRYOUT APPLICATION",
+                            color: 16766720,
+                            description: `A recruit has requested to join the **${applicationData.primaryGame.toUpperCase()}** division.`,
+                            fields: [
+                                { name: "IGN", value: applicationData.inGameName, inline: true },
+                                { name: "Rank", value: applicationData.currentRank, inline: true },
+                                { name: "Discord ID", value: applicationData.discordId, inline: true },
+                                { name: "Real Name", value: applicationData.realName, inline: true },
+                                { name: "VOD Link", value: `[Watch Gameplay](${applicationData.vodLink})`, inline: false },
+                                { name: "Stats Proof", value: `[View Image](${liveImageUrl})`, inline: false },
+                                { name: "Why VIS?", value: `"${applicationData.whyVis}"`, inline: false }
+                            ],
+                            // Embeds the image directly in the Discord channel!
+                            image: { url: liveImageUrl },
+                            footer: { text: "Operative Data Logged • Pending Command Review" }
+                        }]
+                    };
+
+                    await fetch(DISCORD_WEBHOOK_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(discordPayload)
+                    });
+
+                    // 4. Show Success Screen
+                    tryoutForm.style.display = 'none';
+                    if (formSuccess) {
+                        formSuccess.classList.remove('hidden');
+                        formSuccess.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+
+                } catch (error) {
+                    console.error("Transmission error: ", error);
+                    alert("Transmission failed. " + error.message);
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

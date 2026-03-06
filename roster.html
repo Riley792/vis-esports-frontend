@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIS ESPORTS | The Roster</title>
+    <link rel="icon" type="image/png" href="Images/vis-logo.jpeg">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <a href="index.html" class="brand-logo">
+            <img src="Images/vis-logo.jpeg" alt="VIS Esports Logo">
+            <span>VIS ESPORTS</span>
+        </a>
+
+        <div class="hamburger" id="hamburger">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+
+        <div class="nav-menu" id="navMenu">
+            <nav class="nav-links">
+                <a href="roster.html">Roster</a>
+                <a href="tryouts.html">Tryouts</a>
+                <a href="shop.html">Shop</a>
+                <a href="about.html">About</a>
+            </nav>
+            <div class="nav-actions">
+                <a href="#cart" class="btn-ghost cart-btn">Cart (<span>0</span>)</a>
+                <a href="signup.html" class="btn-neon">Join Us</a>
+                <a href="login.html" class="btn-primary">Login</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="roster-header">
+        <h1>THE <span class="highlight-vis">ROSTER</span></h1>
+        <p>Discipline. Strategy. Dominance. Meet the active competitive lineup.</p>
+    </section>
+
+    <section class="filter-section" id="rosterFilter" style="display: none;">
+        <div class="filter-container">
+            <button class="filter-btn active" data-filter="all">All Divisions</button>
+            <button class="filter-btn" data-filter="bloodstrike">Blood Strike</button>
+            <button class="filter-btn" data-filter="codm">CODM</button>
+            <button class="filter-btn" data-filter="freefire">Free Fire</button>
+            <button class="filter-btn" data-filter="eafc">EAFC</button>
+            <button class="filter-btn" data-filter="pes">PES</button>
+        </div>
+    </section>
+
+    <section class="roster-grid-section">
+        <div id="authLoader" style="text-align: center; padding: 3rem 0;">
+            <h2 style="color: var(--accent-vis); font-weight: 900; letter-spacing: 2px;">VERIFYING CLEARANCE...</h2>
+        </div>
+
+        <div class="roster-grid" id="rosterGrid" style="display: none;">
+        </div>
+    </section>
+
+    <section class="roster-grid-section">
+        <div class="roster-grid" id="rosterGrid">
+
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-col brand-col">
+            <div class="brand-logo-footer">
+                <img src="Images/vis-logo.jpeg" alt="VIS Logo">
+                <span>VIS</span>
+            </div>
+            <p>Game with purpose.</p>
+        </div>
+        <div class="footer-col links-col">
+            <a href="roster.html">Roster</a>
+            <a href="tryouts.html">Tryouts</a>
+            <a href="shop.html">Shop</a>
+        </div>
+        <div class="footer-col social-col">
+            <a href="https://www.tiktok.com/@vis.esports" target="_blank">TikTok</a>
+            <a href="https://www.instagram.com/visesports.official" target="_blank">Instagram</a>
+            <a href="https://x.com/EsportsVis48878" target="_blank">X (Twitter)</a>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script type="module">
+        import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js"; 
+        import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyClyDIebYb0y3ur8-N4C2whGcUgeJnz00w",
+            authDomain: "vis-esports.firebaseapp.com",
+            projectId: "vis-esports",
+            storageBucket: "vis-esports.firebasestorage.app",
+            messagingSenderId: "247020318664",
+            appId: "1:247020318664:web:5e0782ac4f04df01821afd"
+        };
+
+        const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        const rosterGrid = document.getElementById('rosterGrid');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+
+        // Maps the database code to the clean UI name
+        const gameDisplayNames = {
+            'bloodstrike': 'Blood Strike',
+            'codm': 'Call of Duty: Mobile',
+            'freefire': 'Free Fire',
+            'eafc': 'EAFC',
+            'pes': 'PES'
+        };
+
+        async function loadActiveRoster() {
+            rosterGrid.innerHTML = '<p style="text-align: center; width: 100%; grid-column: 1 / -1; color: var(--accent-vis); font-weight: 900; letter-spacing: 2px;">ACCESSING VIS MAINFRAME...</p>';
+
+            try {
+                // Only pull players who have been officially 'Accepted' by an admin
+                const q = query(collection(db, "tryouts"), where("status", "==", "Accepted"));
+                const querySnapshot = await getDocs(q);
+
+                rosterGrid.innerHTML = '';
+
+                if (querySnapshot.empty) {
+                    rosterGrid.innerHTML = '<p style="text-align: center; width: 100%; grid-column: 1 / -1; color: var(--text-muted);">The active roster is currently being assembled. Head to the Proving Grounds to apply.</p>';
+                    return;
+                }
+
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const gameId = data.primaryGame;
+                    const gameName = gameDisplayNames[gameId] || gameId.toUpperCase();
+
+                    // Grab the first letter of their In-Game Name for the avatar
+                    // Add a fallback in case inGameName is somehow blank
+                    const initial = data.inGameName ? data.inGameName.charAt(0).toUpperCase() : '?';
+
+                    const card = document.createElement('div');
+                    card.className = 'player-card';
+                    card.setAttribute('data-game', gameId);
+
+                    // We mask their real name with "VIS Operative" for privacy on the public web
+                    card.innerHTML = `
+                    <div class="player-image" style="display: flex; justify-content: center; align-items: center; font-size: 6rem; font-weight: 900; color: var(--bg-dark); background: linear-gradient(135deg, var(--accent-vis), #8b9900);">
+                        ${initial}
+                        <div class="player-role">PRO</div>
+                    </div>
+                    <div class="player-info">
+                        <h2 class="player-ign">${data.inGameName}</h2>
+                        <p class="player-real-name">VIS Operative</p>
+
+                        <div class="player-stats">
+                            <div class="stat">
+                                <span class="stat-label">Rank</span>
+                                <span class="stat-value" style="font-size: 0.9rem;">${data.currentRank || 'Unknown'}</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Division</span>
+                                <span class="stat-value" style="font-size: 0.9rem;">${gameName}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                    rosterGrid.appendChild(card);
+                });
+
+                // Wire up the category buttons now that the cards actually exist
+                attachFilterLogic();
+
+            } catch (error) {
+                console.error("Error loading roster:", error);
+                rosterGrid.innerHTML = '<p style="text-align: center; width: 100%; grid-column: 1 / -1; color: #FF1744;">Encrypted Database Error. Could not load roster.</p>';
+            }
+        }
+
+        function attachFilterLogic() {
+            const playerCards = document.querySelectorAll('.player-card');
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+
+                    const filterValue = btn.getAttribute('data-filter');
+
+                    playerCards.forEach(card => {
+                        if (filterValue === 'all' || card.getAttribute('data-game') === filterValue) {
+                            card.style.display = 'flex';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        }
+
+        // Only load the database info if the user is actually logged in
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                loadActiveRoster();
+            }
+        });
+    </script>
+</body>
+
+</html>

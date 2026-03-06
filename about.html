@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIS ESPORTS | About & Partnerships</title>
+    <link rel="icon" type="image/png" href="Images/vis-logo.jpeg">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <a href="index.html" class="brand-logo">
+            <img src="Images/vis-logo.jpeg" alt="VIS Esports Logo">
+            <span>VIS ESPORTS</span>
+        </a>
+        
+        <div class="hamburger" id="hamburger">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+
+        <div class="nav-menu" id="navMenu">
+            <nav class="nav-links">
+                <a href="roster.html">Roster</a>
+                <a href="tryouts.html">Tryouts</a>
+                <a href="shop.html">Shop</a>
+                <a href="about.html">About</a>
+            </nav>
+            <div class="nav-actions">
+                <a href="#cart" class="btn-ghost cart-btn">Cart (<span>0</span>)</a>
+                <a href="signup.html" class="btn-neon">Join Us</a>
+    <a href="login.html" class="btn-primary">Login</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="about-header">
+        <h1>THE <span class="highlight-vis">VISION</span></h1>
+        <p>Built on discipline. Driven by dominance. Structured for wealth.</p>
+    </section>
+
+    <section class="mission-section">
+        <div class="mission-content">
+            <h2>WE ARE REWRITING THE <span class="highlight-vis">META.</span></h2>
+            <p>The gaming industry is one of the most lucrative entertainment sectors on the planet. But for too long,
+                highly skilled players have spent thousands of hours grinding, carrying randoms, and winning games for
+                nothing more than bragging rights.</p>
+            <p><strong>VIS Esports was built to change that.</strong></p>
+            <p>We are a competitive organization that treats gaming like the high-performance career it is. We provide
+                the platform, secure the brand deals, and handle the business backend, allowing our roster to focus
+                entirely on what they do best: absolute in-game dominance.</p>
+        </div>
+    </section>
+
+    <section class="split-section bg-alt" id="business-model">
+        <div class="split-content">
+            <h2>A SUSTAINABLE <span class="highlight-vis">MODEL.</span></h2>
+            <p class="model-desc">Standard esports contracts are notoriously predatory. We operate differently. Our
+                revenue-sharing model ensures sustainable growth for the organization while highly incentivizing our
+                athletes to perform at their peak.</p>
+            <ul class="revenue-list">
+                <li>🏆 Scalable Tournament Winnings</li>
+                <li>🤝 Direct Brand Sponsorships</li>
+                <li>👕 Global Merchandising</li>
+                <li>🎥 Content & Streaming Support</li>
+            </ul>
+        </div>
+        <div class="split-visual">
+            <div class="statement-box"
+                style="background: var(--bg-dark); padding: 3rem; border: 1px solid rgba(233, 255, 26, 0.2);">
+                <h3 style="font-size: 1.5rem; font-weight: 900; color: var(--accent-vis); margin-bottom: 1rem;">
+                    FINANCIAL TRANSPARENCY</h3>
+                <p style="color: var(--text-light); font-size: 1rem; line-height: 1.6;">We treat gaming like the
+                    high-performance career it is. Our contracts are designed to build wealth for the players who put in
+                    the hours and get the results.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="partnership-section">
+        <div class="form-container">
+            <div class="partnership-text">
+                <h2>PARTNER WITH <span class="highlight-vis">VIS</span></h2>
+                <p>Looking to sponsor a team, inquire about an investment, or book a media appearance? Drop your details
+                    below and our management team will reach out within 24 hours.</p>
+            </div>
+
+            <form id="partnerForm" class="tryout-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="companyName">Company / Brand Name</label>
+                        <input type="text" id="companyName" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="contactEmail">Business Email</label>
+                        <input type="email" id="contactEmail" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="inquiryType">Type of Inquiry</label>
+                    <select id="inquiryType" class="form-control" required>
+                        <option value="" disabled selected>Select Inquiry Type</option>
+                        <option value="sponsorship">Sponsorship & Advertising</option>
+                        <option value="investment">Investment Opportunities</option>
+                        <option value="scrims">Tournament / Scrim Booking</option>
+                        <option value="other">Other Business</option>
+                    </select>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="partnerMessage">Message</label>
+                    <textarea id="partnerMessage" class="form-control" rows="5" required></textarea>
+                </div>
+
+                <button type="submit" class="btn-primary submit-btn">SEND INQUIRY</button>
+            </form>
+
+            <div id="partnerSuccess" class="form-success hidden">
+                <h2>INQUIRY RECEIVED.</h2>
+                <p>Our management team will be in touch shortly.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-col brand-col">
+            <div class="brand-logo-footer">
+                <img src="Images/vis-logo.jpeg" alt="VIS Logo">
+                <span>VIS</span>
+            </div>
+            <p>Game with purpose.</p>
+        </div>
+        <div class="footer-col links-col">
+            <a href="roster.html">Roster</a>
+            <a href="tryouts.html">Tryouts</a>
+            <a href="shop.html">Shop</a>
+        </div>
+        <div class="footer-col social-col">
+            <a href="https://www.tiktok.com/@vis.esports" target="_blank">TikTok</a>
+            <a href="https://www.instagram.com/visesports.official" target="_blank">Instagram</a>
+            <a href="https://x.com/EsportsVis48878" target="_blank">X (Twitter)</a>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script type="module">
+        import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyClyDIebYb0y3ur8-N4C2whGcUgeJnz00w",
+            authDomain: "vis-esports.firebaseapp.com",
+            projectId: "vis-esports",
+            storageBucket: "vis-esports.firebasestorage.app",
+            messagingSenderId: "247020318664",
+            appId: "1:247020318664:web:5e0782ac4f04df01821afd"
+        };
+
+        const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+        const db = getFirestore(app);
+
+        // OFFICIAL VIS DISCORD WEBHOOK (UPDATED)
+        const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1479503488013697215/6Og6jr535ac6aKQdmHm0yF1KaKdCKolLXTyMTBzvcRL122cU-8qcQo7S_FXPCyN6VCcH";
+
+        const partnerForm = document.getElementById('partnerForm');
+        const partnerSuccess = document.getElementById('partnerSuccess');
+
+        if (partnerForm) {
+            partnerForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const submitBtn = partnerForm.querySelector('.submit-btn');
+                const originalText = submitBtn.textContent;
+                
+                submitBtn.textContent = "TRANSMITTING INQUIRY...";
+                submitBtn.disabled = true;
+
+                try {
+                    // 1. Gather Data
+                    const typeSelect = document.getElementById('inquiryType');
+                    const typeDisplay = typeSelect.options[typeSelect.selectedIndex].text;
+
+                    const inquiryData = {
+                        companyName: document.getElementById('companyName').value,
+                        contactEmail: document.getElementById('contactEmail').value,
+                        inquiryType: document.getElementById('inquiryType').value,
+                        message: document.getElementById('partnerMessage').value,
+                        status: "Unread",
+                        submittedAt: serverTimestamp()
+                    };
+
+                    // 2. Save securely to Firebase Database (in a new 'inquiries' collection)
+                    await addDoc(collection(db, "inquiries"), inquiryData);
+
+                    // 3. Fire the Discord Webhook Alert
+                    const discordPayload = {
+                        username: "VIS Business Desk",
+                        avatar_url: "https://i.imgur.com/8Q7v4wA.png", // Generic bot icon
+                        embeds: [{
+                            title: "💼 NEW BUSINESS INQUIRY",
+                            color: 43130, // A sleek corporate teal/blue color
+                            description: `A new commercial inquiry has been submitted by **${inquiryData.companyName}**.`,
+                            fields: [
+                                { name: "Company / Brand", value: inquiryData.companyName, inline: true },
+                                { name: "Contact Email", value: inquiryData.contactEmail, inline: true },
+                                { name: "Inquiry Type", value: typeDisplay, inline: false },
+                                { name: "Message", value: `"${inquiryData.message}"`, inline: false }
+                            ],
+                            footer: { text: "VIS Management Portal • Pending Review" }
+                        }]
+                    };
+
+                    await fetch(DISCORD_WEBHOOK_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(discordPayload)
+                    });
+
+                    // 4. Show Success UI
+                    partnerForm.style.display = 'none';
+                    if (partnerSuccess) {
+                        partnerSuccess.classList.remove('hidden');
+                        partnerSuccess.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+
+                } catch (error) {
+                    console.error("Transmission error: ", error);
+                    alert("Transmission failed. " + error.message);
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIS ESPORTS | Management Comm</title>
+    <link rel="icon" type="image/png" href="Images/vis-logo.jpeg">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>/* General Admin Styles & Variables */
+    :root {
+    --bg-deep: #050505;
+    --surface: #121212;
+    --surface-hover: #1e1e1e;
+    --gold: #FFD700;
+    --gold-glow: 0 0 15px rgba(255, 215, 0, 0.2);
+    --text-light: #f4f4f4;
+    --text-muted: #888;
+    --success: #00E676;
+    --danger: #FF1744;
+    }
+
+    body.auth-page {
+    background-color: var(--bg-deep);
+    color: var(--text-light);
+    background-image: radial-gradient(circle at 50% 0%, #1a1500 0%, transparent 50%);
+    min-height: 100vh;
+    }
+
+    /* --- Tab Navigation --- */
+    .admin-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    padding: 0 5%;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    background: rgba(10, 10, 10, 0.8);
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 70px; /* Sticks right below the navbar */
+    z-index: 100;
+    }
+
+    .tab-btn {
+    background: transparent;
+    color: var(--text-muted);
+    border: none;
+    border-bottom: 3px solid transparent;
+    padding: 1.2rem 1rem;
+    font-weight: 900;
+    font-family: 'Montserrat', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.9rem;
+    }
+
+    .tab-btn:hover { color: #fff; }
+    .tab-btn.active {
+    color: var(--gold);
+    border-bottom: 3px solid var(--gold);
+    text-shadow: 0 0 10px rgba(255,215,0,0.5);
+    }
+
+    /* --- Tryout Grid & Cards --- */
+    .admin-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+    padding: 3rem 5%;
+    }
+
+    .app-card {
+    background: var(--surface);
+    padding: 1.8rem;
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 12px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    }
+
+    /* Subtle glowing top border for cards */
+    .app-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0.3;
+    }
+
+    .app-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    border-color: rgba(255,215,0,0.3);
+    }
+
+    .app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+    }
+
+    .app-header h3 { font-size: 1.4rem; margin: 0; letter-spacing: 1px;}
+
+    .app-actions { display: flex; gap: 1rem; margin-top: 1.5rem; }
+    .btn-approve, .btn-deny {
+    padding: 0.8rem 1rem;
+    border: none;
+    font-weight: 900;
+    cursor: pointer;
+    border-radius: 6px;
+    flex: 1;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.2s ease;
+    }
+    .btn-approve { background: rgba(0, 230, 118, 0.1); color: var(--success); border: 1px solid rgba(0, 230, 118, 0.3);
+    }
+    .btn-approve:hover { background: var(--success); color: #000; box-shadow: 0 0 15px rgba(0, 230, 118, 0.4); }
+
+    .btn-deny { background: rgba(255, 23, 68, 0.1); color: var(--danger); border: 1px solid rgba(255, 23, 68, 0.3); }
+    .btn-deny:hover { background: var(--danger); color: #fff; box-shadow: 0 0 15px rgba(255, 23, 68, 0.4); }
+
+    /* --- Shop Ledger Table --- */
+    .ledger-container {
+    padding: 3rem 5%;
+    display: none;
+    animation: fadeIn 0.4s ease;
+    overflow-x: auto; /* Keeps table from breaking mobile screens */
+    }
+
+    .admin-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: var(--surface);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.05);
+    min-width: 700px; /* Forces table to scroll instead of squishing on phones */
+    }
+
+    .admin-table th, .admin-table td {
+    padding: 20px 25px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+
+    .admin-table th {
+    background-color: #0a0a0a;
+    color: var(--text-muted);
+    font-weight: 900;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    }
+
+    .admin-table tr { transition: background-color 0.2s ease; }
+    .admin-table tr:hover { background-color: var(--surface-hover); }
+
+    .currency-badge {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(255, 215, 0, 0.08);
+    color: var(--gold);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.85rem;
+    margin-right: 10px;
+    margin-bottom: 5px;
+    border: 1px solid rgba(255, 215, 0, 0.2);
+    box-shadow: var(--gold-glow);
+    }
+
+    .btn-fulfill {
+    background: rgba(0, 230, 118, 0.05);
+    color: var(--success);
+    border: 1px solid rgba(0, 230, 118, 0.3);
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    }
+
+    .btn-fulfill:hover {
+    background: var(--success);
+    color: #000;
+    box-shadow: 0 0 15px rgba(0, 230, 118, 0.3);
+    }
+
+    @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+    }
+    </style>
+</head>
+
+<body class="auth-page">
+
+    <header class="navbar">
+        <a href="index.html" class="brand-logo">
+            <span>VIS MANAGEMENT</span>
+        </a>
+    </header>
+
+    <section class="portal-header" style="padding: 4rem 5% 1rem;">
+        <h1>COMMAND <span class="highlight-vis" style="color: #FFD700;">CENTER</span></h1>
+        <p id="auth-status">Verifying Clearance Level...</p>
+    </section>
+
+    <div class="admin-tabs" id="adminTabs" style="display: none;">
+        <button class="tab-btn active" onclick="switchTab('tryouts')">Tryout Queue</button>
+        <button class="tab-btn" onclick="switchTab('ledger')">Shop Ledger</button>
+    </div>
+
+    <div class="admin-grid" id="applicationsGrid">
+        <p style="text-align: center; width: 100%;">Loading data...</p>
+    </div>
+
+    <div class="ledger-container" id="ledgerContainer">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Player ID</th>
+                    <th>Pending Top-Ups</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="ledgerBody">
+            </tbody>
+        </table>
+    </div>
+
+    <script type="module">
+        import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, getDocs, doc, updateDoc, getDoc, deleteField } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyClyDIebYb0y3ur8-N4C2whGcUgeJnz00w",
+            authDomain: "vis-esports.firebaseapp.com",
+            projectId: "vis-esports",
+            storageBucket: "vis-esports.firebasestorage.app",
+            messagingSenderId: "247020318664",
+            appId: "1:247020318664:web:5e0782ac4f04df01821afd"
+        };
+
+        const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Security Check
+        onAuthStateChanged(auth, async (user) => {
+            const authStatus = document.getElementById('auth-status');
+            const grid = document.getElementById('applicationsGrid');
+
+            if (!user) {
+                authStatus.textContent = "Access Denied. Please login.";
+                grid.innerHTML = "";
+                return;
+            }
+
+            const userRef = doc(db, "players", user.uid);
+            const userSnap = await getDoc(userRef);
+
+            if (!userSnap.exists() || userSnap.data().role !== "admin") {
+                authStatus.innerHTML = "<span style='color: #FF1744;'>UNAUTHORIZED CLEARANCE.</span>";
+                grid.innerHTML = "";
+                return;
+            }
+
+            // Clearance Granted
+            authStatus.textContent = `Operative Active: ${user.email}`;
+            document.getElementById('adminTabs').style.display = 'flex';
+
+            // Load both datasets
+            loadApplications();
+            loadLedger();
+        });
+
+        // ==========================================
+        // MODULE 1: TRYOUT QUEUE
+        // ==========================================
+        async function loadApplications() {
+            const grid = document.getElementById('applicationsGrid');
+            grid.innerHTML = "";
+
+            const querySnapshot = await getDocs(collection(db, "tryouts"));
+
+            if (querySnapshot.empty) {
+                grid.innerHTML = "<p>No pending applications in the queue.</p>";
+                return;
+            }
+
+            querySnapshot.forEach((documentSnapshot) => {
+                const data = documentSnapshot.data();
+                const uid = documentSnapshot.id;
+
+                const card = document.createElement('div');
+                card.className = 'app-card';
+                card.innerHTML = `
+                    <div class="app-header">
+                        <h3 style="color: var(--accent-vis); font-weight: 900; text-transform: uppercase;">${data.inGameName}</h3>
+                        <span style="font-size: 0.8rem; color: var(--text-muted);">${data.primaryGame.toUpperCase()}</span>
+                    </div>
+                    <p style="margin-bottom: 0.5rem;"><strong>Rank:</strong> ${data.currentRank}</p>
+                    <p style="margin-bottom: 0.5rem;"><strong>Proof:</strong> <a href="${data.statScreenshotUrl}" target="_blank" style="color: #00E676; font-weight: bold;">View Stats</a></p>
+                    <p style="margin-bottom: 0.5rem;"><strong>Discord:</strong> ${data.discordId}</p>
+                    <p style="margin-bottom: 1rem; font-size: 0.85rem; color: var(--text-muted);"><strong>VOD:</strong> <a href="${data.vodLink}" target="_blank" style="color: var(--accent-vis);">Watch Gameplay</a></p>
+                    <p style="font-size: 0.85rem; font-style: italic; border-left: 2px solid var(--text-muted); padding-left: 10px;">"${data.whyVis}"</p>
+                    <p style="margin-top: 1rem; font-size: 0.8rem; font-weight: bold; text-transform: uppercase;">Status: <span id="status-${uid}">${data.status}</span></p>
+                    <div class="app-actions">
+                        <button class="btn-approve" onclick="updateStatus('${uid}', 'Accepted')">Accept</button>
+                        <button class="btn-deny" onclick="updateStatus('${uid}', 'Denied')">Deny</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        window.updateStatus = async (uid, newStatus) => {
+            if (!confirm(`Mark application as ${newStatus}?`)) return;
+            try {
+                await updateDoc(doc(db, "tryouts", uid), { status: newStatus });
+                document.getElementById(`status-${uid}`).textContent = newStatus;
+                document.getElementById(`status-${uid}`).style.color = newStatus === 'Accepted' ? '#00E676' : '#FF1744';
+            } catch (error) {
+                alert("Failed to update status.");
+            }
+        };
+
+        // ==========================================
+        // MODULE 2: SHOP LEDGER
+        // ==========================================
+        async function loadLedger() {
+            const tableBody = document.getElementById('ledgerBody');
+            tableBody.innerHTML = '';
+
+            try {
+                const querySnapshot = await getDocs(collection(db, "players"));
+                let hasOrders = false;
+
+                querySnapshot.forEach((documentSnapshot) => {
+                    const playerId = documentSnapshot.id;
+                    const data = documentSnapshot.data();
+
+                    let balancesHTML = '';
+                    let fieldsToClear = [];
+
+                    // Find all currencies greater than 0
+                    for (const [key, value] of Object.entries(data)) {
+                        if (key.startsWith('currency_') && value > 0) {
+                            const gameName = key.replace('currency_', '').toUpperCase();
+                            balancesHTML += `<span class="currency-badge">${value} ${gameName}</span>`;
+                            fieldsToClear.push(key);
+                        }
+                    }
+
+                    // Only render rows for players who actually have pending balances
+                    if (balancesHTML !== '') {
+                        hasOrders = true;
+                        // Pass the array of fields to clear as a JSON string to the onclick handler
+                        const fieldsJson = JSON.stringify(fieldsToClear).replace(/"/g, '&quot;');
+
+                        const row = `
+                            <tr id="row-${playerId}">
+                                <td style="font-family: monospace; font-size: 1.1rem; font-weight: bold;">${playerId}</td>
+                                <td>${balancesHTML}</td>
+                                <td>
+                                    <button class="btn-fulfill" onclick="fulfillOrder('${playerId}', '${fieldsJson}')">Mark Fulfilled</button>
+                                </td>
+                            </tr>
+                        `;
+                        tableBody.insertAdjacentHTML('beforeend', row);
+                    }
+                });
+
+                if (!hasOrders) {
+                    tableBody.innerHTML = '<tr><td colspan="3" style="text-align:center; color: #888;">No pending orders in the database.</td></tr>';
+                }
+
+            } catch (error) {
+                tableBody.innerHTML = '<tr><td colspan="3" style="color: #ff4444;">Error fetching ledger.</td></tr>';
+                console.error(error);
+            }
+        }
+
+        window.fulfillOrder = async (playerId, fieldsJson) => {
+            if (!confirm(`Did you successfully top-up ID: ${playerId} via your merchant portal? This will clear their balance.`)) return;
+
+            try {
+                const fieldsToClear = JSON.parse(fieldsJson);
+                const updates = {};
+
+                // Zero out the specific currencies they purchased
+                fieldsToClear.forEach(field => {
+                    updates[field] = 0;
+                });
+
+                await updateDoc(doc(db, "players", playerId), updates);
+
+                // Remove the row from the table dynamically
+                document.getElementById(`row-${playerId}`).remove();
+
+            } catch (error) {
+                console.error("Error fulfilling order:", error);
+                alert("Failed to clear balance in database.");
+            }
+        };
+
+        // ==========================================
+        // TAB SWITCHING LOGIC
+        // ==========================================
+        window.switchTab = (tabName) => {
+            const grid = document.getElementById('applicationsGrid');
+            const ledger = document.getElementById('ledgerContainer');
+            const btns = document.querySelectorAll('.tab-btn');
+
+            btns.forEach(btn => btn.classList.remove('active'));
+
+            if (tabName === 'tryouts') {
+                grid.style.display = 'grid';
+                ledger.style.display = 'none';
+                btns[0].classList.add('active');
+            } else {
+                grid.style.display = 'none';
+                ledger.style.display = 'block';
+                btns[1].classList.add('active');
+            }
+        };
+    </script>
+</body>
+
+</html>

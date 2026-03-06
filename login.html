@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIS ESPORTS | Login</title>
+    <link rel="icon" type="image/png" href="Images/vis-logo.jpeg">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body class="auth-page">
+
+    <div class="auth-bg-visuals">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+    </div>
+
+    <header class="navbar">
+        <a href="index.html" class="brand-logo">
+            <img src="Images/vis-logo.jpeg" alt="VIS Esports Logo">
+            <span>VIS ESPORTS</span>
+        </a>
+    </header>
+
+    <section class="form-section">
+        <div class="form-container glass-form" style="max-width: 450px;">
+            <h2 style="margin-bottom: 2rem; text-align: center;">WELCOME <span class="highlight-vis">BACK</span></h2>
+            <form id="loginForm">
+                <div class="form-group full-width">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" class="form-control" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group full-width">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" class="form-control" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-primary submit-btn">ENTER PORTAL</button>
+                <p style="margin-top: 1.5rem; text-align: center; color: var(--text-light);">
+                    New to the roster? <a href="signup.html" class="highlight-vis" style="text-decoration: none;">Create Account</a>
+                </p>
+            </form>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyClyDIebYb0y3ur8-N4C2whGcUgeJnz00w",
+            authDomain: "vis-esports.firebaseapp.com",
+            projectId: "vis-esports",
+            storageBucket: "vis-esports.firebasestorage.app",
+            messagingSenderId: "247020318664",
+            appId: "1:247020318664:web:5e0782ac4f04df01821afd"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        const loginForm = document.getElementById('loginForm');
+        
+        if (loginForm) {
+            loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const email = document.getElementById('loginEmail').value;
+                const password = document.getElementById('loginPassword').value;
+                const submitBtn = loginForm.querySelector('.submit-btn');
+
+                const originalText = submitBtn.textContent;
+                submitBtn.textContent = "AUTHENTICATING...";
+                submitBtn.disabled = true;
+
+                try {
+                    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                    window.location.href = "index.html"; 
+                } catch (error) {
+                    console.error("Login error:", error);
+                    alert("Access Denied: " + error.message);
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                }
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIS ESPORTS | The Shop</title>
+    <link rel="icon" type="image/png" href="Images/vis-logo.jpeg">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <a href="index.html" class="brand-logo">
+            <img src="Images/vis-logo.jpeg" alt="VIS Esports Logo">
+            <span>VIS ESPORTS</span>
+        </a>
+
+        <div class="hamburger" id="hamburger">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+
+        <div class="nav-menu" id="navMenu">
+            <nav class="nav-links">
+                <a href="roster.html">Roster</a>
+                <a href="tryouts.html">Tryouts</a>
+                <a href="shop.html">Shop</a>
+                <a href="about.html">About</a>
+            </nav>
+            <div class="nav-actions">
+                <a href="#cart" class="btn-ghost cart-btn">Cart (<span>0</span>)</a>
+                <a href="signup.html" class="btn-neon">Join Us</a>
+                <a href="login.html" class="btn-primary">Login</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="shop-header">
+        <h1>THE <span class="highlight-vis">ARMORY</span></h1>
+        <p>Official VIS merchandise and authorized digital currency.</p>
+    </section>
+
+    <section class="shop-section bg-alt">
+        <div class="section-title">
+            <h2>INSTANT <span class="highlight-vis">TOP-UP</span></h2>
+            <div class="title-line"></div>
+        </div>
+
+        <div class="carry1st-grid">
+            <div class="game-card" data-game="codm">
+                <div class="game-cover codm-cover">
+                    <span class="currency-badge">COD Points</span>
+                </div>
+                <div class="game-info">
+                    <h3>Call of Duty: Mobile</h3>
+                    <p>Instant Delivery</p>
+                </div>
+            </div>
+
+            <div class="game-card" data-game="bloodstrike">
+                <div class="game-cover bloodstrike-cover">
+                    <span class="currency-badge">Gold</span>
+                </div>
+                <div class="game-info">
+                    <h3>Blood Strike</h3>
+                    <p>Instant Delivery</p>
+                </div>
+            </div>
+
+            <div class="game-card" data-game="freefire">
+                <div class="game-cover freefire-cover">
+                    <span class="currency-badge">Diamonds</span>
+                </div>
+                <div class="game-info">
+                    <h3>Free Fire</h3>
+                    <p>Instant Delivery</p>
+                </div>
+            </div>
+
+            <div class="game-card" data-game="eafc">
+                <div class="game-cover eafc-cover">
+                    <span class="currency-badge">FC Points</span>
+                </div>
+                <div class="game-info">
+                    <h3>EAFC</h3>
+                    <p>Instant Delivery</p>
+                </div>
+            </div>
+
+            <div class="game-card" data-game="pes">
+                <div class="game-cover pes-cover">
+                    <span class="currency-badge">eFootball Coins</span>
+                </div>
+                <div class="game-info">
+                    <h3>PES</h3>
+                    <p>Instant Delivery</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="shop-section">
+        <div class="section-title">
+            <h2>OFFICIAL <span class="highlight-vis">APPAREL</span></h2>
+            <div class="title-line"></div>
+        </div>
+
+        <div class="product-grid">
+            <div class="product-card">
+                <div class="product-image">
+                    <div class="image-placeholder merch-placeholder">PRO JERSEY</div>
+                </div>
+                <div class="product-details">
+                    <h3 class="product-name">VIS 2026 Pro Jersey</h3>
+                    <p class="product-price">₦25,000</p>
+                    <button class="btn-outline add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="topup-modal-overlay" id="topupModal">
+        <div class="topup-modal-content carry1st-style">
+            <div class="modal-header" id="modalHeaderBanner">
+                <button class="close-modal" id="closeModal">&times;</button>
+                <h2 id="modalGameTitle">Call of Duty: Mobile</h2>
+                <p>Official & Instant Top-Up</p>
+            </div>
+
+            <div class="modal-body-scroll">
+                <div class="modal-section">
+                    <div class="step-header">
+                        <span class="step-number">1</span>
+                        <label>Player Details</label>
+                    </div>
+                    <div class="input-with-button">
+                        <input type="text" id="playerIdInput" class="form-control"
+                            placeholder="Enter Player ID (e.g. 5123456789)" required>
+                        <button class="btn-outline verify-btn" id="verifyBtn" type="button">Verify</button>
+                    </div>
+                    <p class="verify-status" id="verifyStatus"></p>
+                </div>
+
+                <div class="modal-section">
+                    <div class="step-header">
+                        <span class="step-number">2</span>
+                        <label>Select Recharge</label>
+                    </div>
+                    <div class="currency-options">
+                        
+                    </div>
+                </div>
+
+                <div class="modal-section">
+                    <div class="step-header">
+                        <span class="step-number">3</span>
+                        <label>Payment Method</label>
+                    </div>
+                    <div class="payment-options">
+                        <div class="payment-method selected" data-method="card">
+                            <div class="pay-icon">💳</div>
+                            <span>Card / Bank</span>
+                        </div>
+                        <div class="payment-method" data-method="transfer">
+                            <div class="pay-icon">🏦</div>
+                            <span>Bank Transfer</span>
+                        </div>
+                        <div class="payment-method" data-method="ussd">
+                            <div class="pay-icon">📱</div>
+                            <span>USSD</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-sticky-footer">
+                <div class="checkout-summary">
+                    <span class="summary-label">Total Payment</span>
+                    <span class="summary-price" id="checkoutPrice">₦0</span>
+                </div>
+                <button class="btn-primary submit-btn" id="payNowBtn">Pay Now</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-col brand-col">
+            <div class="brand-logo-footer">
+                <img src="Images/vis-logo.jpeg" alt="VIS Logo">
+                <span>VIS</span>
+            </div>
+            <p>Game with purpose.</p>
+        </div>
+        <div class="footer-col links-col">
+            <a href="roster.html">Roster</a>
+            <a href="tryouts.html">Tryouts</a>
+            <a href="shop.html">Shop</a>
+        </div>
+        <div class="footer-col social-col">
+            <a href="https://www.tiktok.com/@vis.esports" target="_blank">TikTok</a>
+            <a href="https://www.instagram.com/visesports.official" target="_blank">Instagram</a>
+            <a href="https://x.com/EsportsVis48878" target="_blank">X (Twitter)</a>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

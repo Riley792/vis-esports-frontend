@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIS ESPORTS | Join the Org</title>
+    <link rel="icon" type="image/png" href="Images/vis-logo.jpeg">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+
+<body class="auth-page">
+
+    <div class="auth-bg-visuals">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+    </div>
+
+    <header class="navbar">
+        <a href="index.html" class="brand-logo">
+            <img src="Images/vis-logo.jpeg" alt="VIS Esports Logo">
+            <span>VIS ESPORTS</span>
+        </a>
+
+        <div class="hamburger" id="hamburger">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+
+        <div class="nav-menu" id="navMenu">
+            <nav class="nav-links">
+                <a href="roster.html">Roster</a>
+                <a href="tryouts.html">Tryouts</a>
+                <a href="shop.html">Shop</a>
+                <a href="about.html">About</a>
+            </nav>
+            <div class="nav-actions">
+                <a href="signup.html" class="btn-ghost">Join Us</a>
+                <a href="login.html" class="btn-primary">Login</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="form-section">
+        <div class="form-container glass-form" style="max-width: 550px;">
+            <h2 style="margin-bottom: 2rem; text-align: center;">JOIN THE <span
+                    class="highlight-vis">ORGANIZATION</span></h2>
+            <form id="signupForm">
+                <form id="signupForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="username">Username (IGN)</label>
+                            <input type="text" id="username" class="form-control" placeholder="VIS_Ghost" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="regEmail">Email</label>
+                            <input type="email" id="regEmail" class="form-control" placeholder="email@example.com"
+                                required>
+                        </div>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="regGame">Primary Division</label>
+                        <select id="regGame" class="form-control" required
+                            style="background-color: rgba(255, 255, 255, 0.05); color: var(--text-light);">
+                            <option value="" disabled selected>Select Your Game</option>
+                            <option value="BS">Blood Strike</option>
+                            <option value="CO">Call of Duty: Mobile</option>
+                            <option value="FF">Free Fire</option>
+                            <option value="EA">EAFC</option>
+                            <option value="PE">PES</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="regPassword">Password</label>
+                        <input type="password" id="regPassword" class="form-control"
+                            placeholder="Create a strong password" required>
+                    </div>
+
+                    <button type="submit" class="btn-primary submit-btn">CREATE ACCOUNT</button>
+
+                    <p style="margin-top: 1.5rem; text-align: center; color: var(--text-light);">
+                        Already a member? <a href="login.html" class="highlight-vis"
+                            style="text-decoration: none;">Login here</a>
+                    </p>
+                </form>
+            </form>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+    <script type="module">
+        // 1. Import Firebase core and services using CDN links
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // 2. Your actual Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyClyDIebYb0y3ur8-N4C2whGcUgeJnz00w",
+            authDomain: "vis-esports.firebaseapp.com",
+            projectId: "vis-esports",
+            storageBucket: "vis-esports.firebasestorage.app",
+            messagingSenderId: "247020318664",
+            appId: "1:247020318664:web:5e0782ac4f04df01821afd"
+        };
+
+        // 3. Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // 4. Handle Form Submission
+        const signupForm = document.getElementById('signupForm');
+
+        if (signupForm) {
+            signupForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                // Get the UI elements
+                const username = document.getElementById('username').value;
+                const email = document.getElementById('regEmail').value;
+                const password = document.getElementById('regPassword').value;
+                const divisionCode = document.getElementById('regGame').value;
+                const submitBtn = signupForm.querySelector('.submit-btn');
+
+                // Update UI to show loading state
+                submitBtn.textContent = "ENCRYPTING DATA...";
+                submitBtn.disabled = true;
+
+                try {
+                    // A. Create the user in Firebase Auth
+                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                    const user = userCredential.user;
+
+                    // B. Generate the VIS ID
+                    const today = new Date();
+                    const yy = String(today.getFullYear()).slice(-2);
+                    const mm = String(today.getMonth() + 1).padStart(2, '0');
+                    const dd = String(today.getDate()).padStart(2, '0');
+                    const dateKey = `${yy}${mm}${dd}`;
+
+                    let dailyCounter = JSON.parse(localStorage.getItem('visDailyCounter')) || {};
+                    if (dailyCounter.date !== dateKey) {
+                        dailyCounter = { date: dateKey, count: 1 };
+                    } else {
+                        dailyCounter.count++;
+                    }
+                    localStorage.setItem('visDailyCounter', JSON.stringify(dailyCounter));
+                    const sequence = String(dailyCounter.count).padStart(3, '0');
+
+                    const generatedVisID = `VIS-${yy}-${divisionCode}-${mm}${dd}-${sequence}`;
+
+                    // C. Save the complete player profile to Firestore
+                    await setDoc(doc(db, "players", user.uid), {
+                        uid: user.uid,
+                        username: username,
+                        email: email,
+                        division: divisionCode,
+                        visId: generatedVisID,
+                        role: "recruit",
+                        joinDate: new Date().toISOString()
+                    });
+
+                    // D. Success! Alert the user and send them to the login page
+                    alert(`Registration successful!\n\nWelcome to the roster, ${username}.\nYour official Player Tag is: ${generatedVisID}`);
+                    window.location.href = "login.html";
+
+                } catch (error) {
+                    console.error("Error signing up:", error);
+                    alert("Registration failed: " + error.message);
+                    submitBtn.textContent = "CREATE ACCOUNT";
+                    submitBtn.disabled = false;
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
+</body>
+
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIS ESPORTS | Stop Playing For Free</title>
+    <link rel="icon" type="image/png" href="Images/vis-logo.jpeg">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <a href="index.html" class="brand-logo">
+            <img src="Images/vis-logo.jpeg" alt="VIS Esports Logo">
+            <span>VIS ESPORTS</span>
+        </a>
+
+        <div class="hamburger" id="hamburger">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+
+        <div class="nav-menu" id="navMenu">
+            <nav class="nav-links">
+                <a href="roster.html">Roster</a>
+                <a href="tryouts.html">Tryouts</a>
+                <a href="shop.html">Shop</a>
+                <a href="about.html">About</a>
+            </nav>
+            <div class="nav-actions">
+                <a href="#cart" class="btn-ghost cart-btn">Cart (<span>0</span>)</a>
+                <a href="signup.html" class="btn-neon">Join Us</a>
+                <a href="login.html" class="btn-primary">Login</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">STOP PLAYING<br><span class="highlight-vis">FOR FREE.</span></h1>
+            <p class="hero-subtitle">You put in the hours. You get the wins. It’s time your skill actually paid off. We
+                build the platform, you focus on straight dominance.</p>
+            <div class="hero-buttons">
+                <button class="btn-primary" id="applyBtn">Apply for Tryouts</button>
+                <button class="btn-outline">View the Roster</button>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <img src="Images/vis-hero.png" alt="VIS Icon" class="hero-large-logo">
+        </div>
+    </section>
+
+    <section class="value-prop">
+        <div class="grid-container">
+            <div class="card">
+                <div class="icon">🛡️</div>
+                <h3>Pure Discipline</h3>
+            </div>
+            <div class="card">
+                <div class="icon">🧠</div>
+                <h3>Tactical Strategy</h3>
+            </div>
+            <div class="card">
+                <div class="icon">📈</div>
+                <h3>Peak Performance</h3>
+            </div>
+            <div class="card">
+                <div class="icon">👑</div>
+                <h3>Straight Dominance</h3>
+            </div>
+        </div>
+    </section>
+
+    <section class="split-section" id="about">
+        <div class="split-content">
+            <h2>YES. YOU GET <span class="highlight-vis">PAID.</span></h2>
+            <p class="model-desc" style="margin-bottom: 1.5rem; color: var(--text-muted);">We believe skill should
+                translate to income. Our competitive revenue-sharing model is built to reward performance and loyalty.
+            </p>
+            <ul class="revenue-list">
+                <li>🏆 Tournament Payouts</li>
+                <li>🤝 Brand Sponsorships</li>
+                <li>👕 Official Merch Cuts</li>
+                <li>🎥 Streaming Revenue</li>
+            </ul>
+        </div>
+        <div class="split-visual">
+            <div class="statement-box"
+                style="background: var(--bg-dark); padding: 3rem; border-left: 4px solid var(--accent-vis);">
+                <h3 style="font-size: 1.8rem; font-weight: 900; margin-bottom: 1rem;">WE SECURE THE DEALS.<br>YOU SECURE
+                    THE WINS.</h3>
+                <p style="color: var(--text-muted); font-size: 1rem; line-height: 1.6;">No predatory clauses. No hidden
+                    fees. We handle the business backend so you can focus on absolute in-game dominance.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="tryout-teaser" id="tryouts">
+        <div class="teaser-box">
+            <h2>Think you have what it takes?</h2>
+            <p>We are currently scouting top-tier talent. Stop playing casuals.</p>
+            <form class="quick-apply">
+                <select name="game" id="gameSelect" class="form-input">
+                    <option value="" disabled selected>Select Your Primary Game</option>
+                    <option value="bloodstrike">Blood Strike</option>
+                    <option value="codm">Call of Duty: Mobile</option>
+                    <option value="freefire">Free Fire</option>
+                    <option value="eafc">EAFC</option>
+                    <option value="pes">PES</option>
+                </select>
+                <button type="button" class="btn-primary" id="startAppBtn">Start Application</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-col brand-col">
+            <div class="brand-logo-footer">
+                <img src="Images/vis-logo.jpeg" alt="VIS Logo">
+                <span>VIS</span>
+            </div>
+            <p>Game with purpose.</p>
+        </div>
+        <div class="footer-col links-col">
+            <a href="roster.html">Roster</a>
+            <a href="tryouts.html">Tryouts</a>
+            <a href="shop.html">Shop</a>
+        </div>
+        <div class="footer-col social-col">
+            <a href="https://www.tiktok.com/@vis.esports" target="_blank">TikTok</a>
+            <a href="https://www.instagram.com/visesports.official" target="_blank">Instagram</a>
+            <a href="https://x.com/EsportsVis48878" target="_blank">X (Twitter)</a>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
