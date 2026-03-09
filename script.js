@@ -209,10 +209,19 @@ document.addEventListener('DOMContentLoaded', () => {
         'codm': {
             icon: 'CP',
             packages: [
-                { amount: '80 + 8', price: '₦1,200' },
-                { amount: '400 + 20', price: '₦5,500' },
-                { amount: '800 + 80', price: '₦10,500' },
-                { amount: '2000 + 400', price: '₦25,000' }
+                { amount: '30', price: '₦650' },
+                { amount: '80', price: '₦1,650' },
+                { amount: '420', price: '₦8,200' },
+                { amount: '880', price: '₦15,800' },
+                { amount: '2,400', price: '₦39,900' },
+                { amount: '5,000', price: '₦82,000' },
+                { amount: '10,800', price: '₦160,000' },
+                { amount: '21,600', price: '₦310,000' },
+                { amount: '32,400', price: '₦460,000' },
+                { amount: '43,200', price: '₦600,000' },
+                { amount: '54,000', price: '₦750,000' },
+                { amount: 'Battle Pass', price: '₦7,300' },
+                { amount: 'Premium BP', price: '₦17,000' }
             ]
         },
         'bloodstrike': {
@@ -339,8 +348,11 @@ document.addEventListener('DOMContentLoaded', () => {
             verifyBtn.addEventListener('click', () => {
                 const id = playerIdInput.value.trim();
 
-                if (id.length < 5) {
-                    verifyStatus.textContent = "Please enter a valid Player ID.";
+                // Strict rule: Must be exactly VIS-YYYY-MMDD-XXX (e.g., VIS-2026-0228-001)
+                const strictIdFormat = /^VIS-\d{4}-\d{4}-\d{3}$/;
+
+                if (!strictIdFormat.test(id)) {
+                    verifyStatus.textContent = "Invalid format. Must be VIS-YYYY-MMDD-XXX";
                     verifyStatus.style.color = '#ff4444';
                     isPlayerVerified = false;
                     return;
@@ -351,7 +363,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 verifyBtn.disabled = true;
 
                 setTimeout(() => {
-                    verifyStatus.textContent = `Player Found: VIS | ${id}`;
+                    verifyStatus.textContent = `Player Verified: ${id}`;
                     verifyStatus.className = 'verify-status status-success';
                     verifyStatus.style.color = '#00E676';
                     verifyBtn.disabled = false;
