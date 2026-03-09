@@ -96,7 +96,7 @@
         // 1. Import Firebase core and services using CDN links
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, collection, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         // 2. Your actual Firebase Configuration
         const firebaseConfig = {
@@ -138,10 +138,10 @@
 
                     // B. Generate the VIS ID
                     const today = new Date();
-                    const yy = String(today.getFullYear()).slice(-2);
+                    const yyyy = today.getFullYear(); // Changed to full 4-digit year (e.g., 2026)
                     const mm = String(today.getMonth() + 1).padStart(2, '0');
                     const dd = String(today.getDate()).padStart(2, '0');
-                    const dateKey = `${yy}${mm}${dd}`;
+                    const dateKey = `${yyyy}${mm}${dd}`;
 
                     let dailyCounter = JSON.parse(localStorage.getItem('visDailyCounter')) || {};
                     if (dailyCounter.date !== dateKey) {
@@ -152,18 +152,8 @@
                     localStorage.setItem('visDailyCounter', JSON.stringify(dailyCounter));
                     const sequence = String(dailyCounter.count).padStart(3, '0');
 
-                    const generatedVisID = `VIS-${yy}-${divisionCode}-${mm}${dd}-${sequence}`;
-
-                    // C. Save the complete player profile to Firestore
-                    await setDoc(doc(db, "players", user.uid), {
-                        uid: user.uid,
-                        username: username,
-                        email: email,
-                        division: divisionCode,
-                        visId: generatedVisID,
-                        role: "recruit",
-                        joinDate: new Date().toISOString()
-                    });
+                    // GAME TAG REMOVED. Exact format: VIS-YYYY-MMDD-XXX
+                    const generatedVisID = `VIS-${yyyy}-${mm}${dd}-${sequence}`;
 
                     // D. Success! Alert the user and send them to the login page
                     alert(`Registration successful!\n\nWelcome to the roster, ${username}.\nYour official Player Tag is: ${generatedVisID}`);
