@@ -62,19 +62,6 @@
                     </div>
 
                     <div class="form-group full-width">
-                        <label for="regGame">Primary Division</label>
-                        <select id="regGame" class="form-control" required
-                            style="background-color: rgba(255, 255, 255, 0.05); color: var(--text-light);">
-                            <option value="" disabled selected>Select Your Game</option>
-                            <option value="BS">Blood Strike</option>
-                            <option value="CO">Call of Duty: Mobile</option>
-                            <option value="FF">Free Fire</option>
-                            <option value="EA">EAFC</option>
-                            <option value="PE">PES</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group full-width">
                         <label for="regPassword">Password</label>
                         <input type="password" id="regPassword" class="form-control"
                             placeholder="Create a strong password" required>
@@ -124,7 +111,6 @@
                 const username = document.getElementById('username').value;
                 const email = document.getElementById('regEmail').value;
                 const password = document.getElementById('regPassword').value;
-                const divisionCode = document.getElementById('regGame').value;
                 const submitBtn = signupForm.querySelector('.submit-btn');
 
                 // Update UI to show loading state
@@ -136,24 +122,44 @@
                     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                     const user = userCredential.user;
 
-                    // B. Generate the VIS ID
-                    const today = new Date();
-                    const yyyy = today.getFullYear(); // Changed to full 4-digit year (e.g., 2026)
-                    const mm = String(today.getMonth() + 1).padStart(2, '0');
-                    const dd = String(today.getDate()).padStart(2, '0');
-                    const dateKey = `${yyyy}${mm}${dd}`;
+                    // B. Generate the VIS ID using global Firestore data
+                    const now = new Date();
+                    const yyyy = now.getFullYear();
+                    const mm = String(now.getMonth() + 1).padStart(2, '0');
+                    const dd = String(now.getDate()).padStart(2, '0');
+                    const dateStr = `${mm}${dd}`;
 
-                    let dailyCounter = JSON.parse(localStorage.getItem('visDailyCounter')) || {};
-                    if (dailyCounter.date !== dateKey) {
-                        dailyCounter = { date: dateKey, count: 1 };
-                    } else {
-                        dailyCounter.count++;
+                    // Ask Firebase for the most recent player to find the last number used
+                    const playersRef = collection(db, "players");
+                    const q = query(playersRef, orderBy("joinDate", "desc"), limit(1));
+                    const snapshot = await getDocs(q);
+
+                    let nextNumber = 1;
+
+                    if (!snapshot.empty) {
+                        const lastPlayer = snapshot.docs[0].data();
+                        if (lastPlayer.visId) {
+                            const parts = lastPlayer.visId.split('-');
+                            if (parts.length === 4) {
+                                const lastCount = parseInt(parts[3], 10);
+                                nextNumber = lastCount + 1; // Increment the global counter
+                            }
+                        }
                     }
-                    localStorage.setItem('visDailyCounter', JSON.stringify(dailyCounter));
-                    const sequence = String(dailyCounter.count).padStart(3, '0');
 
-                    // GAME TAG REMOVED. Exact format: VIS-YYYY-MMDD-XXX
-                    const generatedVisID = `VIS-${yyyy}-${mm}${dd}-${sequence}`;
+                    const paddedNumber = String(nextNumber).padStart(3, '0');
+                    const generatedVisID = `VIS-${yyyy}-${dateStr}-${paddedNumber}`;
+
+                    // C. Save the complete player profile to Firestore
+                    await setDoc(doc(db, "players", user.uid), {
+                        uid: user.uid,
+                        username: username,
+                        email: email,
+                        division: "Unassigned", // Default since they no longer pick one
+                        visId: generatedVisID,
+                        role: "recruit",
+                        joinDate: new Date().toISOString()
+                    });
 
                     // D. Success! Alert the user and send them to the login page
                     alert(`Registration successful!\n\nWelcome to the roster, ${username}.\nYour official Player Tag is: ${generatedVisID}`);
@@ -165,7 +171,18 @@
                     submitBtn.textContent = "CREATE ACCOUNT";
                     submitBtn.disabled = false;
                 }
-            });
+
+                // D. Success! Alert the user and send them to the login page
+                alert(`Registration successful!\n\nWelcome to the roster, ${username}.\nYour official Player Tag is: ${generatedVisID}`);
+                window.location.href = "login.html";
+
+            } catch (error) {
+                console.error("Error signing up:", error);
+                alert("Registration failed: " + error.message);
+                submitBtn.textContent = "CREATE ACCOUNT";
+                submitBtn.disabled = false;
+            }
+        });
         }
     </script>
 </body>
